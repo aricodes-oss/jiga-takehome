@@ -1,0 +1,19 @@
+services:
+   frontend:
+      restart: unless-stopped
+      build:
+         context: frontend
+         dockerfile: Dockerfile.local
+      volumes:
+         - ./frontend:/frontend
+         - /frontend/node_modules
+      ports:
+         - 3000:3000
+   backend:
+      restart: unless-stopped
+      build:
+         context: backend
+         dockerfile: Dockerfile.local
+      volumes:
+         - ./backend:/backend
+         - /backend/node_modules
