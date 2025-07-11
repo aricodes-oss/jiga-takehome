@@ -11,6 +11,8 @@ services:
       build:
          context: frontend
          dockerfile: Dockerfile.local
+      environment:
+         - BACKEND_URL=http://backend:3000
       volumes:
          - ./frontend:/frontend
          - /frontend/node_modules

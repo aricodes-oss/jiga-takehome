@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider, isServer } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
 import theme from '../theme';
 
@@ -39,7 +40,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <Container maxWidth="lg" sx={{ padding: ['16px'] }}>
-            {children}
+            <Suspense>{children}</Suspense>
           </Container>
         </ThemeProvider>
       </QueryClientProvider>
