@@ -1,4 +1,11 @@
 services:
+   reverse-proxy:
+      restart: unless-stopped
+      image: caddy:latest
+      volumes:
+         - ./Caddyfile:/etc/caddy/Caddyfile
+      ports:
+         - 3000:3000
    frontend:
       restart: unless-stopped
       build:
@@ -7,8 +14,6 @@ services:
       volumes:
          - ./frontend:/frontend
          - /frontend/node_modules
-      ports:
-         - 3000:3000
    backend:
       restart: unless-stopped
       build:

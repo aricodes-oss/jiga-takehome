@@ -2,7 +2,7 @@ import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
 import fastifyMongodb from '@fastify/mongodb';
 // Load .env file
 import 'dotenv/config';
-import { FastifyPluginAsync } from 'fastify';
+import { FastifyPluginAsync, FastifyPluginOptions } from 'fastify';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -15,6 +15,8 @@ export type AppOptions = {
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {};
+
+const baseOpts: FastifyPluginOptions = { prefix: '/api' };
 
 const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void> => {
   // Place here your custom code!
@@ -40,7 +42,7 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
   // eslint-disable-next-line no-void
   void fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'routes'),
-    options: opts,
+    options: { ...opts, ...baseOpts },
     forceESM: true,
   });
 };
