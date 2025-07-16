@@ -1,4 +1,4 @@
-import { Aggregate, SupplierQuotes } from '@/types';
+import { Aggregate, FilledSupplier, OfferItem } from '@/types';
 import { Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -34,7 +34,7 @@ export default function ComparisonTable({ aggregate }: TableProps) {
     let total = 0;
 
     for (const itemId of Object.keys(items)) {
-      const quote = suppliers[supplierId][itemId];
+      const quote = (suppliers[supplierId] as FilledSupplier)[itemId] as OfferItem;
       if (!quote) {
         continue;
       }
@@ -71,8 +71,8 @@ export default function ComparisonTable({ aggregate }: TableProps) {
                     value={Object.keys(items).reduce(
                       (acc, itemId) =>
                         acc +
-                        suppliers[supplierId][itemId].unitPrice *
-                          suppliers[supplierId][itemId].quantity,
+                        ((suppliers[supplierId] as FilledSupplier)[itemId] as OfferItem).unitPrice *
+                          ((suppliers[supplierId] as FilledSupplier)[itemId] as OfferItem).quantity,
                       0,
                     )}
                     {...totalPrice}

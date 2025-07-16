@@ -1,3 +1,4 @@
+import { FilledSupplier, OfferItem } from '@/types';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
@@ -29,7 +30,7 @@ export default function Body({ items, suppliers }: BodyProps) {
     };
 
     for (const supplierId of Object.keys(suppliers)) {
-      const quoted = suppliers[supplierId][itemId];
+      const quoted = (suppliers[supplierId] as FilledSupplier)[itemId] as OfferItem;
       console.log(quoted);
       prices[itemId].min = Math.min(quoted.unitPrice, prices[itemId].min);
       prices[itemId].max = Math.max(quoted.unitPrice, prices[itemId].max);
@@ -44,10 +45,10 @@ export default function Body({ items, suppliers }: BodyProps) {
 
   return Object.entries(items).map(([itemId, item]) => (
     <TableRow key={itemId}>
-      <TableCell>{item.name}</TableCell>
+      <TableCell>{(item as FilledSupplier).name}</TableCell>
 
       {Object.keys(suppliers).map(supplierId => {
-        const quote = suppliers[supplierId][itemId];
+        const quote = (suppliers[supplierId] as FilledSupplier)[itemId] as OfferItem;
         const { min, max, avg } = prices[itemId];
 
         return (
