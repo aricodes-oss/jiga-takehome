@@ -1,36 +1,35 @@
-import { useTop } from '@/query-hooks/quotes';
-import { SupplierQuotes } from '@/types';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 
 import SupplierInfo from './SupplierInfo';
+import { Items, Suppliers } from './types';
 
 interface HeadProps {
-  quotes: SupplierQuotes;
-  quoteId: string;
+  suppliers: Suppliers;
 }
 
-export default function Head({ quotes, quoteId }: HeadProps) {
-  const topQuery = useTop(quoteId);
-  console.log(topQuery.data);
+export default function Head({ suppliers }: HeadProps) {
+  const topSupplier = Object.entries(suppliers).toSorted((a, b) => b[1].score - a[1].score)[0][0];
 
   return (
     <TableHead>
       <TableRow>
         <TableCell rowSpan={2}>Part name</TableCell>
-        {Object.keys(quotes).map(supplierId => (
+        {Object.entries(suppliers).map(([supplierId, { name, country, rating }]) => (
           <SupplierInfo
-            id={supplierId}
-            top={supplierId === topQuery.data?.supplierId}
             key={supplierId}
+            name={name}
+            country={country}
+            rating={rating}
+            top={supplierId === topSupplier}
           />
         ))}
       </TableRow>
       <TableRow>
-        {Object.keys(quotes).map(itemId => (
-          <React.Fragment key={itemId}>
+        {Object.keys(suppliers).map(supplierId => (
+          <React.Fragment key={supplierId}>
             <TableCell>Unit Price</TableCell>
             <TableCell>Price</TableCell>
           </React.Fragment>

@@ -1,14 +1,13 @@
-import { SupplierQuotes } from '@/types';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 
-import ItemName from './ItemName';
 import Price from './Price';
+import { Items, Suppliers } from './types';
 
 interface BodyProps {
-  quotes: SupplierQuotes;
-  quoteId: string;
+  items: Items;
+  suppliers: Suppliers;
 }
 
 interface Prices {
@@ -19,17 +18,9 @@ interface Prices {
   };
 }
 
-export default function Body({ quotes }: BodyProps) {
-  const items = Array.from(
-    new Set(
-      Object.values(quotes)
-        .map(quote => Object.keys(quote))
-        .flat(Infinity),
-    ),
-  ) as string[];
-
+export default function Body({ items, suppliers }: BodyProps) {
   const prices: Prices = {};
-  for (const itemId of items) {
+  for (const itemId of Object.keys(items)) {
     let avg = 0;
     prices[itemId] = {
       min: Infinity,
@@ -37,30 +28,31 @@ export default function Body({ quotes }: BodyProps) {
       max: -Infinity,
     };
 
-    for (const supplierId of Object.keys(quotes)) {
-      const quoted = quotes[supplierId][itemId];
+    for (const supplierId of Object.keys(suppliers)) {
+      const quoted = suppliers[supplierId][itemId];
+      console.log(quoted);
       prices[itemId].min = Math.min(quoted.unitPrice, prices[itemId].min);
       prices[itemId].max = Math.max(quoted.unitPrice, prices[itemId].max);
       avg += quoted.unitPrice;
     }
 
-    avg /= Object.keys(quotes).length;
+    avg /= Object.keys(suppliers).length;
     prices[itemId].avg = avg;
   }
 
-  return items.map(item => (
-    <TableRow key={item}>
-      <TableCell>
-        <ItemName id={item} />
-      </TableCell>
+  console.log(prices);
 
-      {Object.keys(quotes).map(supplierId => {
-        const quote = quotes[supplierId][item];
-        const { min, max, avg } = prices[item];
+  return Object.entries(items).map(([itemId, item]) => (
+    <TableRow key={itemId}>
+      <TableCell>{item.name}</TableCell>
+
+      {Object.keys(suppliers).map(supplierId => {
+        const quote = suppliers[supplierId][itemId];
+        const { min, max, avg } = prices[itemId];
 
         return (
           <React.Fragment key={supplierId}>
-            <Price value={quote.unitPrice} {...prices[item]} />
+            <Price value={quote.unitPrice} {...prices[itemId]} />
             <Price
               value={quote.unitPrice * quote.quantity}
               min={min * quote.quantity}

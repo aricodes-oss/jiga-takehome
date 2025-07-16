@@ -1,4 +1,4 @@
-import { Offer, Quote, SupplierQuotes } from '@/types';
+import { Aggregate, Offer, Quote, SupplierQuotes } from '@/types';
 
 import client from './client';
 
@@ -18,4 +18,8 @@ export async function summarize(id: string): Promise<SupplierQuotes> {
 
 export async function top(id: string): Promise<Offer> {
   return (await client.get(`${BASE}/${id}/top`)).data as Offer;
+}
+
+export async function aggregate(id: string): Promise<Aggregate> {
+  return (await client.get(`${BASE}/${id}/aggregate`)).data as Aggregate;
 }

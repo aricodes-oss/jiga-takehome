@@ -11,7 +11,7 @@ import Table from './Table';
 
 export default function QuoteComparison() {
   const quoteId = useSearchParams().get('quoteId');
-  const query = quotes.useSummary(quoteId as string);
+  const query = quotes.useAggregation(quoteId as string);
 
   if (!quoteId || !query.data) {
     return (
@@ -23,9 +23,11 @@ export default function QuoteComparison() {
     );
   }
 
+  console.log(query.data);
+
   return (
     <>
-      <Table quotes={query.data} quoteId={quoteId} />
+      <Table aggregate={query.data} />
       <Grid
         container
         spacing={1}

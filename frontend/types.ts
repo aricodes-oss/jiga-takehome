@@ -40,3 +40,21 @@ export interface SupplierQuotes {
     [itemId: string]: OfferItem;
   };
 }
+
+export interface FilledSupplier {
+  [itemId: string]: OfferItem;
+  name: string;
+  country: string;
+  rating: number;
+  score: number;
+}
+
+export interface Aggregate {
+  suppliers: {
+    [supplierId: string]: FilledSupplier;
+  };
+  items: {
+    name: string;
+    [supplierId: string]: FilledSupplier;
+  };
+}

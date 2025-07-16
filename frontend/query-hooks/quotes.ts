@@ -26,3 +26,9 @@ export const useTop = (id: string) =>
     queryKey: queryKey.concat('top', id),
     queryFn: () => quotes.top(id),
   });
+
+export const useAggregation = (id: string) =>
+  useQuery({
+    queryKey: queryKey.concat('aggregate', id),
+    queryFn: () => quotes.aggregate(id),
+  });
